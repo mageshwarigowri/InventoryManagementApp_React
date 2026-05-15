@@ -23,7 +23,7 @@ const Sidebar = ({ activeTab, setActiveTab, theme }) => {
     <nav className={`w-full md:w-64 ${theme.bgSidebar} border-r px-4 py-6 flex flex-col gap-2 shadow-sm no-print z-10`}>
       <div className="flex items-center gap-2 px-2 mb-8">
         <div className="bg-green-100 p-2 rounded-lg"><Package className="text-green-600 w-6 h-6" /></div>
-        <h1 className={`text-xl font-bold ${theme.textMain}`}>FreshStock</h1>
+        <h1 className={`text-xl font-bold ${theme.textMain}`}>Smart Inventory Management</h1>
       </div>
       {navItems.map(item => (
         <button key={item.id} onClick={() => setActiveTab(item.id)} className={`flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${activeTab === item.id ? 'bg-green-600 text-white font-semibold shadow-md' : `${theme.textMuted} ${theme.hover}`}`}>
