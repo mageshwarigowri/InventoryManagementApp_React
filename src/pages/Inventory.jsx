@@ -1,4 +1,3 @@
-
 import { 
   LayoutDashboard, Package, FileText, Settings, Users,
   AlertTriangle, Download, Plus, Edit, Trash2, Printer, FilterX, ArrowUpDown,
@@ -35,16 +34,15 @@ const Inventory = ({ inventory, setInventory, categories, setCategories, theme, 
   if (sortConfig.key) {
     processedInventory.sort((a, b) => {
       let aVal = a[sortConfig.key], bVal = b[sortConfig.key];
-      if (['quantity', 'price', 'gst'].includes(sortConfig.key)) return sortConfig.direction === 'asc' ? Number(aVal) - Number(bVal) : Number(bVal) - Number(aVal);
+      if (['quantity', 'price', 'costPrice', 'gst'].includes(sortConfig.key)) return sortConfig.direction === 'asc' ? Number(aVal) - Number(bVal) : Number(bVal) - Number(aVal);
       return sortConfig.direction === 'asc' ? String(aVal).localeCompare(String(bVal)) : String(bVal).localeCompare(String(aVal));
     });
   }
 
-  // --- Sub-Component: Inventory Form ---
   const InventoryForm = () => {
     const [formData, setFormData] = useState(editingItem || {
       productId: `PRD-${Math.floor(1000 + Math.random() * 9000)}`, name: '', category: categories[0], 
-      quantity: '', unit: 'kg', price: '', gst: '0', mfgDate: '', expDate: '', barcode: ''
+      quantity: '', unit: 'kg', costPrice: '', price: '', gst: '0', mfgDate: '', expDate: '', barcode: ''
     });
     const [isCustomCategory, setIsCustomCategory] = useState(false);
     const [customCategory, setCustomCategory] = useState('');
@@ -67,7 +65,6 @@ const Inventory = ({ inventory, setInventory, categories, setCategories, theme, 
         <div className={`${theme.bgCard} ${theme.border} border rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto`}>
           <h2 className={`text-xl font-bold mb-6 ${theme.textMain}`}>{editingItem ? 'Edit Product' : 'Add New Product'}</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-             {/* Form Fields (Abbreviated for brevity, normally you'd map these or split them further) */}
              <div className="grid grid-cols-2 gap-4">
               <div><label className={`block text-sm font-medium ${theme.textMuted} mb-1`}>Product ID</label><input required type="text" value={formData.productId} onChange={e => setFormData({...formData, productId: e.target.value})} className={`w-full rounded-md px-3 py-2 border ${theme.input}`} /></div>
               <div><label className={`block text-sm font-medium ${theme.textMuted} mb-1`}>Item Name</label><input required type="text" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className={`w-full rounded-md px-3 py-2 border ${theme.input}`} /></div>
@@ -91,8 +88,9 @@ const Inventory = ({ inventory, setInventory, categories, setCategories, theme, 
                  </div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div><label className={`block text-sm font-medium ${theme.textMuted} mb-1`}>Price (₹)</label><input required min="0" type="number" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className={`w-full rounded-md px-3 py-2 border ${theme.input}`} /></div>
+            <div className="grid grid-cols-3 gap-4">
+              <div><label className={`block text-sm font-medium ${theme.textMuted} mb-1`}>Cost Price (₹)</label><input required min="0" type="number" value={formData.costPrice} onChange={e => setFormData({...formData, costPrice: e.target.value})} className={`w-full rounded-md px-3 py-2 border ${theme.input}`} /></div>
+              <div><label className={`block text-sm font-medium ${theme.textMuted} mb-1`}>Selling Price (₹)</label><input required min="0" type="number" value={formData.price} onChange={e => setFormData({...formData, price: e.target.value})} className={`w-full rounded-md px-3 py-2 border ${theme.input}`} /></div>
               <div><label className={`block text-sm font-medium ${theme.textMuted} mb-1`}>GST (%)</label><select value={formData.gst} onChange={e => setFormData({...formData, gst: e.target.value})} className={`w-full rounded-md px-3 py-2 border ${theme.input}`}>{GST_RATES.map(r => <option key={r} value={r}>{r}%</option>)}</select></div>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -120,7 +118,7 @@ const Inventory = ({ inventory, setInventory, categories, setCategories, theme, 
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className={`${theme.tableHeader} text-sm border-b`}>
-                {[ { key: 'productId', label: 'ID' }, { key: 'name', label: 'Product Name' }, { key: 'category', label: 'Category' }, { key: 'quantity', label: 'Qty/Unit' }, { key: 'price', label: 'Price (₹)' }, { key: 'gst', label: 'GST' }, { key: 'barcode', label: 'Barcode' }, { key: 'expDate', label: 'Expiry' } ].map(col => (
+                {[ { key: 'productId', label: 'ID' }, { key: 'name', label: 'Product Name' }, { key: 'category', label: 'Category' }, { key: 'quantity', label: 'Qty/Unit' }, { key: 'costPrice', label: 'Cost Price (₹)' }, { key: 'price', label: 'Selling Price (₹)' }, { key: 'gst', label: 'GST' }, { key: 'barcode', label: 'Barcode' },  { key: 'expDate', label: 'Expiry' } ].map(col => (
                   <th key={col.key} className="p-3 font-semibold whitespace-nowrap cursor-pointer hover:opacity-80" onClick={() => handleSort(col.key)}>
                     <div className="flex items-center gap-1">{col.label}{sortConfig.key === col.key && <ArrowUpDown className="w-3 h-3 opacity-50" />}</div>
                   </th>
@@ -132,7 +130,8 @@ const Inventory = ({ inventory, setInventory, categories, setCategories, theme, 
                 <td className="p-2"><input type="text" placeholder="Filter Name..." onChange={(e) => handleFilterChange('name', e.target.value)} value={filters.name || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}/></td>
                 <td className="p-2"><select onChange={(e) => handleFilterChange('category', e.target.value)} value={filters.category || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}><option value="">All</option>{categories.map(c => <option key={c} value={c}>{c}</option>)}</select></td>
                 <td className="p-2"><input type="text" placeholder="Filter Qty..." onChange={(e) => handleFilterChange('quantity', e.target.value)} value={filters.quantity || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}/></td>
-                <td className="p-2"><input type="text" placeholder="Filter Price..." onChange={(e) => handleFilterChange('price', e.target.value)} value={filters.price || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}/></td>
+                <td className="p-2"><input type="text" placeholder="Filter Cost Price..." onChange={(e) => handleFilterChange('costPrice', e.target.value)} value={filters.costPrice || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}/></td>
+                <td className="p-2"><input type="text" placeholder="Filter Selling Price..." onChange={(e) => handleFilterChange('price', e.target.value)} value={filters.price || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}/></td>
                 <td className="p-2"><input type="text" placeholder="Filter GST..." onChange={(e) => handleFilterChange('gst', e.target.value)} value={filters.gst || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}/></td>
                 <td className="p-2"><input type="text" placeholder="Filter Barcode..." onChange={(e) => handleFilterChange('barcode', e.target.value)} value={filters.barcode || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}/></td>
                 <td className="p-2"></td>
@@ -145,8 +144,9 @@ const Inventory = ({ inventory, setInventory, categories, setCategories, theme, 
                   <td className={`p-3 text-sm font-medium ${theme.textMain}`}>{item.productId}</td>
                   <td className={`p-3 text-sm font-medium ${theme.textMain}`}>{item.name}</td>
                   <td className="p-3"><span className={`inline-block px-2 py-1 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded text-xs`}>{item.category}</span></td>
-                  <td className={`p-3 text-sm ${theme.textMain}`}>{item.quantity} {item.unit}</td>
-                  <td className={`p-3 text-sm ${theme.textMain}`}>₹{item.price}</td>
+                  <td className={`p-3 text-sm font-bold ${theme.textMain}`}>{item.quantity} <span className="font-normal text-xs">{item.unit}</span></td>
+                  <td className={`p-3 text-sm text-red-500`}>₹{item.costPrice || 0}</td>
+                  <td className={`p-3 text-sm text-green-600 font-bold`}>₹{item.price}</td>
                   <td className={`p-3 text-sm ${theme.textMain}`}>{item.gst}%</td>
                   <td className="p-3 text-center"><span className={`font-['Libre_Barcode_39'] text-3xl leading-none block ${theme.textMain}`} title={item.barcode}>*{item.barcode}*</span></td>
                   <td className="p-3 text-sm">{getDaysToExpiry(item.expDate) < 0 ? <span className="text-red-500 font-bold">Expired</span> : <span className={theme.textMain}>{item.expDate}</span>}</td>

@@ -16,6 +16,7 @@ export const DUMMY_DATA = [
     category: 'Grains',
     quantity: 20,
     unit: 'kg',
+    costPrice: 380,
     price: 450,
     gst: '5',
     mfgDate: '2025-01-10',
@@ -29,6 +30,7 @@ export const DUMMY_DATA = [
     category: 'Dairy',
     quantity: 15,
     unit: 'L',
+    costPrice: 48,
     price: 60,
     gst: '0',
     mfgDate: '2026-04-01',
@@ -42,6 +44,7 @@ export const DUMMY_DATA = [
     category: 'Fruits',
     quantity: 30,
     unit: 'kg',
+    costPrice: 95,
     price: 120,
     gst: '0',
     mfgDate: '2026-04-10',
@@ -55,6 +58,7 @@ export const DUMMY_DATA = [
     category: 'Bakery',
     quantity: 25,
     unit: 'pcs',
+    costPrice: 32,
     price: 45,
     gst: '5',
     mfgDate: '2026-04-15',
@@ -68,6 +72,7 @@ export const DUMMY_DATA = [
     category: 'Dairy',
     quantity: 18,
     unit: 'cups',
+    costPrice: 24,
     price: 35,
     gst: '0',
     mfgDate: '2026-04-20',
@@ -83,6 +88,7 @@ export const DUMMY_DATA = [
     category: 'Condiments',
     quantity: 12,
     unit: 'bottles',
+    costPrice: 82,
     price: 110,
     gst: '12',
     mfgDate: '2025-12-01',
@@ -96,6 +102,7 @@ export const DUMMY_DATA = [
     category: 'Dairy',
     quantity: 10,
     unit: 'packs',
+    costPrice: 68,
     price: 90,
     gst: '5',
     mfgDate: '2026-05-01',
@@ -109,6 +116,7 @@ export const DUMMY_DATA = [
     category: 'Fruits',
     quantity: 40,
     unit: 'dozen',
+    costPrice: 50,
     price: 70,
     gst: '0',
     mfgDate: '2026-05-05',
@@ -122,6 +130,7 @@ export const DUMMY_DATA = [
     category: 'Dairy',
     quantity: 14,
     unit: 'packs',
+    costPrice: 40,
     price: 55,
     gst: '5',
     mfgDate: '2026-03-15',
@@ -135,6 +144,7 @@ export const DUMMY_DATA = [
     category: 'Beverages',
     quantity: 22,
     unit: 'L',
+    costPrice: 105,
     price: 140,
     gst: '12',
     mfgDate: '2026-04-01',
@@ -150,6 +160,7 @@ export const DUMMY_DATA = [
     category: 'Cooking Essentials',
     quantity: 6,
     unit: 'bottles',
+    costPrice: 520,
     price: 650,
     gst: '12',
     mfgDate: '2026-01-01',
@@ -163,6 +174,7 @@ export const DUMMY_DATA = [
     category: 'Beverages',
     quantity: 28,
     unit: 'boxes',
+    costPrice: 170,
     price: 220,
     gst: '5',
     mfgDate: '2026-02-10',
@@ -176,6 +188,7 @@ export const DUMMY_DATA = [
     category: 'Frozen Foods',
     quantity: 3,
     unit: 'packs',
+    costPrice: 10,
     price: 15,
     gst: '5',
     mfgDate: '2026-03-01',
@@ -189,6 +202,7 @@ export const DUMMY_DATA = [
     category: 'Breakfast',
     quantity: 19,
     unit: 'boxes',
+    costPrice: 145,
     price: 180,
     gst: '12',
     mfgDate: '2026-01-20',
@@ -202,6 +216,7 @@ export const DUMMY_DATA = [
     category: 'Dry Fruits',
     quantity: 25,
     unit: 'kg',
+    costPrice: 820,
     price: 950,
     gst: '5',
     mfgDate: '2026-02-15',
@@ -218,7 +233,7 @@ export const DUMMY_SUPPLIERS = [
     contactPerson: 'Paramesh',
     email: 'orders@dairyfarms.com',
     mobile: '9876543210',
-    gstNumber: '22AAAAA0000A1Z5'
+    gstNumber: '29ABFDT7821K1Z3'
   },
   {
     id: '2',
@@ -227,7 +242,7 @@ export const DUMMY_SUPPLIERS = [
     contactPerson: 'Ramesh Kumar',
     email: 'sales@freshharvest.com',
     mobile: '9123456780',
-    gstNumber: '33BBBBB1111B2Z6'
+    gstNumber: '33FGHPL9045M2Z7'
   },
   {
     id: '3',
@@ -236,9 +251,97 @@ export const DUMMY_SUPPLIERS = [
     contactPerson: 'Priya Sharma',
     email: 'support@dailyneeds.com',
     mobile: '9988776655',
-    gstNumber: '44CCCCC2222C3Z7'
+    gstNumber: '27JKLNR5632Q1Z5'
+  },
+  {
+    id: '4',
+    supplierId: 'SUP-004',
+    name: 'Golden Grains Market',
+    contactPerson: 'Suresh Babu',
+    email: 'contact@goldengrains.com',
+    mobile: '9090909090',
+    gstNumber: '24MNOPX1188R1Z9'
+  },
+  {
+    id: '5',
+    supplierId: 'SUP-005',
+    name: 'Healthy Dry Fruits Co.',
+    contactPerson: 'Anita Verma',
+    email: 'sales@healthydryfruits.com',
+    mobile: '9345678912',
+    gstNumber: '36QRSTY4477L2Z1'
   }
 ];
+
+export const DUMMY_INVOICES = [
+  {
+    id: '1',
+    invoiceId: 'INV-2026-001',
+    type: 'PURCHASE',
+    supplierId: 'SUP-001',
+    date: '2026-05-16',
+    items: [
+      { productId: 'PRD-1002', qty: 10, cost: 48 },
+      { productId: 'PRD-1005', qty: 15, cost: 24 }
+    ],
+    totalAmount: 840,
+    status: 'PAID'
+  },
+  {
+    id: '2',
+    invoiceId: 'INV-2026-002',
+    type: 'PURCHASE',
+    supplierId: 'SUP-002',
+    date: '2026-05-17',
+    items: [
+      { productId: 'PRD-1003', qty: 20, cost: 95 },
+      { productId: 'PRD-1008', qty: 25, cost: 50 }
+    ],
+    totalAmount: 3150,
+    status: 'PAID'
+  },
+  {
+    id: '3',
+    invoiceId: 'INV-2026-003',
+    type: 'PURCHASE',
+    supplierId: 'SUP-003',
+    date: '2026-05-18',
+    items: [
+      { productId: 'PRD-1006', qty: 12, cost: 82 },
+      { productId: 'PRD-1010', qty: 18, cost: 105 }
+    ],
+    totalAmount: 2874,
+    status: 'PENDING'
+  },
+  {
+    id: '4',
+    invoiceId: 'INV-2026-004',
+    type: 'PURCHASE',
+    supplierId: 'SUP-004',
+    date: '2026-05-19',
+    items: [
+      { productId: 'PRD-1001', qty: 30, cost: 380 },
+      { productId: 'PRD-1014', qty: 10, cost: 145 }
+    ],
+    totalAmount: 12850,
+    status: 'PAID'
+  },
+  {
+    id: '5',
+    invoiceId: 'INV-2026-005',
+    type: 'PURCHASE',
+    supplierId: 'SUP-005',
+    date: '2026-05-20',
+    items: [
+      { productId: 'PRD-1015', qty: 8, cost: 820 },
+      { productId: 'PRD-1012', qty: 12, cost: 170 }
+    ],
+    totalAmount: 8600,
+    status: 'PAID'
+  }
+];
+
+
 
 export const getTheme = (isDarkMode) => ({
   bgMain: isDarkMode ? 'bg-gray-900' : 'bg-slate-50',

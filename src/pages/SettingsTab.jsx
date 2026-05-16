@@ -10,7 +10,7 @@ import {
 } from 'recharts';
 import { DEFAULT_CATEGORIES, DUMMY_DATA, DUMMY_SUPPLIERS, getTheme } from '../utils/constants';
 
-const SettingsTab = ({ isDarkMode, setIsDarkMode, setInventory, setSuppliers, setCategories, theme }) => {
+const SettingsTab = ({ isDarkMode, setIsDarkMode, setInventory, setSuppliers, setInvoices, setCategories, theme }) => {
   return (
     <div className="max-w-2xl mx-auto animate-in fade-in duration-500 no-print">
       <h2 className={`text-2xl font-bold ${theme.textMain} mb-6`}>System Settings</h2>
@@ -24,7 +24,7 @@ const SettingsTab = ({ isDarkMode, setIsDarkMode, setInventory, setSuppliers, se
         <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
           <h3 className={`text-lg font-semibold ${theme.textMain} mb-2`}>Data Management</h3>
           <div className={`p-4 ${isDarkMode ? 'bg-red-900/10' : 'bg-red-50'} rounded-lg border border-red-200 dark:border-red-900`}>
-            <button onClick={() => { if (window.confirm('Wipe all data?')) { setInventory(DUMMY_DATA); setSuppliers(DUMMY_SUPPLIERS); setCategories(DEFAULT_CATEGORIES); } }} className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-red-200 text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 shadow-sm"><RotateCcw className="w-4 h-4" /> Restore Default Data</button>
+            <button onClick={() => { if (window.confirm('Wipe all data?')) { setInventory(DUMMY_DATA); setSuppliers(DUMMY_SUPPLIERS); setInvoices(DUMMY_INVOICES); setCategories(DEFAULT_CATEGORIES); } }} className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-red-200 text-red-600 px-4 py-2 rounded-lg hover:bg-red-50 shadow-sm"><RotateCcw className="w-4 h-4" /> Restore Default Data</button>
           </div>
         </div>
       </div>
