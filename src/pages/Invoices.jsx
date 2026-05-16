@@ -13,6 +13,31 @@ import { DEFAULT_CATEGORIES, DUMMY_DATA, DUMMY_SUPPLIERS, getTheme, today } from
 const Invoices = ({ invoices, setInvoices, inventory, setInventory, suppliers, theme, isDarkMode }) => {
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  // --- EXPORT FUNCTIONALITY ---
+  const exportInvoicesToCSV = () => {
+    const headers = "Invoice No.,Date,Supplier Name,Supplier GSTIN,Items Bought,Total Amount(₹),Status";
+    
+    const rows = invoices.map(inv => {
+      const supplier = suppliers.find(s => s.supplierId === inv.supplierId);
+      const supplierName = `"${supplier ? supplier.name : 'Unknown'}"`;
+      const supplierGST = supplier ? supplier.gstNumber : 'N/A';
+      
+      return `${inv.invoiceId},${inv.date},${supplierName},${supplierGST},${inv.items.length},${inv.totalAmount},${inv.status}`;
+    });
+
+    const csvContent = "\uFEFF" + headers + "\n" + rows.join("\n");
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "purchase_invoices.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  // --------------------------------
+
   // Sub-component for creating an invoice
   const InvoiceForm = () => {
     const [formData, setFormData] = useState({
@@ -71,6 +96,7 @@ const Invoices = ({ invoices, setInvoices, inventory, setInventory, suppliers, t
 
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        
         <div className={`${theme.bgCard} ${theme.border} border rounded-xl p-6 w-full max-w-4xl max-h-[90vh] overflow-y-auto`}>
           <h2 className={`text-xl font-bold mb-6 ${theme.textMain}`}>Create Purchase Invoice</h2>
           
@@ -149,7 +175,16 @@ const Invoices = ({ invoices, setInvoices, inventory, setInventory, suppliers, t
           <h2 className={`text-2xl font-bold ${theme.textMain}`}>Purchase Invoices</h2>
           <p className={`text-sm ${theme.textMuted}`}>Process incoming stock and track supplier payments.</p>
         </div>
-        <button onClick={() => setIsFormOpen(true)} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"><Plus className="w-4 h-4" /> Process New Invoice</button>
+        
+        {/* EXPORT BUTTON ADDED HERE */}
+        <div className="flex gap-3">
+          <button onClick={exportInvoicesToCSV} className={`flex items-center gap-2 border px-4 py-2 rounded-lg ${theme.border} ${theme.textMain} ${theme.hover}`}>
+            <Download className="w-4 h-4" /> Export CSV
+          </button>
+          <button onClick={() => setIsFormOpen(true)} className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            <Plus className="w-4 h-4" /> Process New Invoice
+          </button>
+        </div>
       </div>
 
       <div className={`${theme.bgCard} rounded-xl shadow-sm border ${theme.border} overflow-hidden`}>
@@ -159,6 +194,8 @@ const Invoices = ({ invoices, setInvoices, inventory, setInventory, suppliers, t
               <th className="p-4 font-semibold">Invoice No.</th>
               <th className="p-4 font-semibold">Date</th>
               <th className="p-4 font-semibold">Supplier</th>
+              {/* 1. NEW HEADER FOR GSTIN */}
+              <th className="p-4 font-semibold">GSTIN</th>
               <th className="p-4 font-semibold">Items Bought</th>
               <th className="p-4 font-semibold">Total Amount</th>
               <th className="p-4 font-semibold">Status</th>
@@ -174,6 +211,7 @@ const Invoices = ({ invoices, setInvoices, inventory, setInventory, suppliers, t
                   <td className={`p-4 font-medium ${theme.textMain}`}>{inv.invoiceId}</td>
                   <td className={`p-4 ${theme.textMain}`}>{inv.date}</td>
                   <td className={`p-4 font-medium ${theme.textMain}`}>{supplier ? supplier.name : 'Unknown'}</td>
+                  <td className={`p-4 ${theme.textMain}`}>{supplier ? supplier.gstNumber : 'N/A'}</td>
                   <td className={`p-4 ${theme.textMain}`}>{inv.items.length} unique products</td>
                   <td className={`p-4 font-bold ${theme.textMain}`}>₹{inv.totalAmount.toLocaleString()}</td>
                   <td className="p-4">

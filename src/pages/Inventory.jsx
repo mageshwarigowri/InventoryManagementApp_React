@@ -114,16 +114,16 @@ const Inventory = ({ inventory, setInventory, categories, setCategories, theme, 
         </div>
       </div>
       <div className={`${theme.bgCard} rounded-xl shadow-sm border ${theme.border} overflow-hidden`}>
-        <div className="overflow-x-auto">
+        <div className="w-full">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className={`${theme.tableHeader} text-sm border-b`}>
                 {[ { key: 'productId', label: 'ID' }, { key: 'name', label: 'Product Name' }, { key: 'category', label: 'Category' }, { key: 'quantity', label: 'Qty/Unit' }, { key: 'costPrice', label: 'Cost Price (₹)' }, { key: 'price', label: 'Selling Price (₹)' }, { key: 'gst', label: 'GST' }, { key: 'barcode', label: 'Barcode' },  { key: 'expDate', label: 'Expiry' } ].map(col => (
-                  <th key={col.key} className="p-3 font-semibold whitespace-nowrap cursor-pointer hover:opacity-80" onClick={() => handleSort(col.key)}>
+                  <th key={col.key} className="p-2 text-xs font-semibold break-words cursor-pointer hover:opacity-80" onClick={() => handleSort(col.key)}>
                     <div className="flex items-center gap-1">{col.label}{sortConfig.key === col.key && <ArrowUpDown className="w-3 h-3 opacity-50" />}</div>
                   </th>
                 ))}
-                <th className="p-3 font-semibold text-center no-print">Actions</th>
+                <th className="p-2 font-semibold text-center no-print">Actions</th>
               </tr>
               <tr className={`${theme.bgSidebar} border-b ${theme.border} no-print`}>
                 <td className="p-2"><input type="text" placeholder="Filter ID..." onChange={(e) => handleFilterChange('productId', e.target.value)} value={filters.productId || ''} className={`w-full p-1 text-xs rounded border ${theme.input}`}/></td>
@@ -143,14 +143,14 @@ const Inventory = ({ inventory, setInventory, categories, setCategories, theme, 
                 <tr key={item.id} className={theme.tableRow}>
                   <td className={`p-3 text-sm font-medium ${theme.textMain}`}>{item.productId}</td>
                   <td className={`p-3 text-sm font-medium ${theme.textMain}`}>{item.name}</td>
-                  <td className="p-3"><span className={`inline-block px-2 py-1 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded text-xs`}>{item.category}</span></td>
+                  <td className="p-2"><span className={`inline-block px-2 py-1 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'} rounded text-xs`}>{item.category}</span></td>
                   <td className={`p-3 text-sm font-bold ${theme.textMain}`}>{item.quantity} <span className="font-normal text-xs">{item.unit}</span></td>
                   <td className={`p-3 text-sm text-red-500`}>₹{item.costPrice || 0}</td>
                   <td className={`p-3 text-sm text-green-600 font-bold`}>₹{item.price}</td>
                   <td className={`p-3 text-sm ${theme.textMain}`}>{item.gst}%</td>
-                  <td className="p-3 text-center"><span className={`font-['Libre_Barcode_39'] text-3xl leading-none block ${theme.textMain}`} title={item.barcode}>*{item.barcode}*</span></td>
-                  <td className="p-3 text-sm">{getDaysToExpiry(item.expDate) < 0 ? <span className="text-red-500 font-bold">Expired</span> : <span className={theme.textMain}>{item.expDate}</span>}</td>
-                  <td className="p-3 no-print flex gap-2 justify-center">
+                  <td className="p-2 text-center"><span className={`font-['Libre_Barcode_39'] text-xl leading-none block ${theme.textMain}`} title={item.barcode}>*{item.barcode}*</span></td>
+                  <td className="p-2 text-sm">{getDaysToExpiry(item.expDate) < 0 ? <span className="text-red-500 font-bold">Expired</span> : <span className={theme.textMain}>{item.expDate}</span>}</td>
+                  <td className="p-2 no-print flex gap-2 justify-center">
                     <button onClick={() => {setEditingItem(item); setIsInvFormOpen(true);}} className="p-1.5 text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded"><Edit className="w-4 h-4" /></button>
                     <button onClick={() => { if(window.confirm('Delete item?')) setInventory(inventory.filter(i => i.id !== item.id)); }} className="p-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded"><Trash2 className="w-4 h-4" /></button>
                   </td>
