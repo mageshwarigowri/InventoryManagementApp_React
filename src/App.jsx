@@ -16,6 +16,7 @@ import Suppliers from './pages/Suppliers';
 import Invoices from './pages/Invoices';
 import Reports from './pages/Reports';
 import SettingsTab from './pages/SettingsTab';
+import Billing from './pages/Billing';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -30,7 +31,6 @@ export default function App() {
     return saved && saved !== '[]' ? JSON.parse(saved) : DUMMY_SUPPLIERS;
   });
 
-  // NEW STATE: Invoices
   const [invoices, setInvoices] = useState(() => {
     const saved = localStorage.getItem('groceryInvoices');
     return saved && saved !== '[]' ? JSON.parse(saved) : DUMMY_INVOICES;
@@ -40,6 +40,21 @@ export default function App() {
     const saved = localStorage.getItem('groceryCategories');
     return saved && saved !== '[]' ? JSON.parse(saved) : DEFAULT_CATEGORIES;
   });
+
+  const [sales, setSales] = useState(() => {
+  const saved = localStorage.getItem('grocerySales');
+  return saved && saved !== '[]' ? JSON.parse(saved) : [];
+});
+
+const [customers, setCustomers] = useState(() => {
+    const saved = localStorage.getItem('groceryCustomers');
+    return saved && saved !== '[]' ? JSON.parse(saved) : [];
+  });
+
+  const [discountRules, setDiscountRules] = useState(() => {
+    const saved = localStorage.getItem('groceryDiscountRules');
+    return saved && saved !== '[]' ? JSON.parse(saved) : [];
+  });
   
   const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('groceryTheme') === 'dark');
 
@@ -48,6 +63,9 @@ export default function App() {
   useEffect(() => { localStorage.setItem('groceryInvoices', JSON.stringify(invoices)); }, [invoices]); // NEW EFFECT
   useEffect(() => { localStorage.setItem('groceryCategories', JSON.stringify(categories)); }, [categories]);
   useEffect(() => { localStorage.setItem('groceryTheme', isDarkMode ? 'dark' : 'light'); }, [isDarkMode]);
+  useEffect(() => { localStorage.setItem('grocerySales', JSON.stringify(sales)); }, [sales]);
+  useEffect(() => { localStorage.setItem('groceryCustomers', JSON.stringify(customers)); }, [customers]);
+  useEffect(() => { localStorage.setItem('groceryDiscountRules', JSON.stringify(discountRules)); }, [discountRules]);
 
   const theme = getTheme(isDarkMode);
 
@@ -68,11 +86,12 @@ export default function App() {
 
       <main className="flex-1 p-4 md:p-8 overflow-y-auto relative">
         {activeTab === 'dashboard' && <Dashboard inventory={inventory} categories={categories} theme={theme} isDarkMode={isDarkMode} />}
-        {activeTab === 'inventory' && <Inventory inventory={inventory} setInventory={setInventory} categories={categories} setCategories={setCategories} theme={theme} isDarkMode={isDarkMode} />}
+        {activeTab === 'inventory' && <Inventory inventory={inventory} setInventory={setInventory} categories={categories} setCategories={setCategories} discountRules={discountRules} setDiscountRules={setDiscountRules} theme={theme} isDarkMode={isDarkMode} />}
         {activeTab === 'suppliers' && <Suppliers suppliers={suppliers} setSuppliers={setSuppliers} theme={theme} isDarkMode={isDarkMode} />}
         {activeTab === 'invoices'  && <Invoices invoices={invoices} setInvoices={setInvoices} inventory={inventory} setInventory={setInventory} suppliers={suppliers} theme={theme} isDarkMode={isDarkMode} />}
         {activeTab === 'reports'   && <Reports inventory={inventory} theme={theme} />}
-        {activeTab === 'settingstab'  && <SettingsTab isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} setInventory={setInventory} setSuppliers={setSuppliers} setInvoices={setInvoices} setCategories={setCategories} theme={theme} />}
+        {activeTab === 'billing'   && <Billing invoices={invoices} setInvoices={setInvoices} inventory={inventory} setInventory={setInventory} sales={sales} setSales={setSales} customers={customers} setCustomers={setCustomers} theme={theme} isDarkMode={isDarkMode} />}
+        {activeTab === 'settingstab'  && <SettingsTab isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} inventory={inventory} setInventory={setInventory} suppliers={suppliers} setSuppliers={setSuppliers} invoices={invoices} setInvoices={setInvoices} categories={categories} setCategories={setCategories} sales={sales} setSales={setSales} customers={customers} setCustomers={setCustomers} discountRules={discountRules} setDiscountRules={setDiscountRules} theme={theme} />}
       </main>
     </div>
   );

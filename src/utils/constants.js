@@ -7,6 +7,13 @@ export const generateBarcode = () => Math.floor(100000000000 + Math.random() * 9
 export const getDaysToExpiry = (expDate) => Math.ceil((new Date(expDate) - new Date().setHours(0,0,0,0)) / (1000 * 60 * 60 * 24));
 export const today = new Date().toISOString().split('T')[0];
 
+export const STORE_DETAILS = {
+  name: "Smart Inventory Management",
+  address: "Avadi, Chennai, Tamil Nadu",
+  phone: "+91 98765 43210",
+  contactPerson: "Lingeshwaran M",
+};
+
 export const DUMMY_DATA = [
   // Expired Products
   {
